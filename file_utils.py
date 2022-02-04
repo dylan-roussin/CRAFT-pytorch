@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
+from unittest import result
 import numpy as np
 import cv2
 import imgproc
+from tesserocr import PyTessBaseAPI
 
 # borrowed from https://github.com/lengstrom/fast-style-transfer/blob/master/src/utils.py
 def get_files(img_dir):
@@ -30,6 +32,14 @@ def list_files(in_path):
     # gt_files.sort()
     return img_files, mask_files, gt_files
 
+# crop and pass each bounding box through tesserocr - dylan-roussin
+# def read_image():
+#     print(boxes)
+
+
+
+
+# save result
 def saveResult(img_file, img, boxes, dirname='./result/', verticals=None, texts=None):
         """ save text detection result one by one
         Args:
@@ -59,12 +69,12 @@ def saveResult(img_file, img, boxes, dirname='./result/', verticals=None, texts=
                 f.write(strResult)
 
                 poly = poly.reshape(-1, 2)
-                cv2.polylines(img, [poly.reshape((-1, 1, 2))], True, color=(0, 0, 255), thickness=2)
+                cv2.polylines(img, [poly.reshape((-1, 1, 2))], True, color=(0, 255, 0), thickness=2)
                 ptColor = (0, 255, 255)
                 if verticals is not None:
                     if verticals[i]:
                         ptColor = (255, 0, 0)
-
+                
                 if texts is not None:
                     font = cv2.FONT_HERSHEY_SIMPLEX
                     font_scale = 0.5

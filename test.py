@@ -4,6 +4,7 @@ MIT License
 """
 
 # -*- coding: utf-8 -*-
+from cgi import test
 import sys
 import os
 import time
@@ -68,6 +69,7 @@ if not os.path.isdir(result_folder):
 
 def test_net(net, image, text_threshold, link_threshold, low_text, cuda, poly, refine_net=None):
     t0 = time.time()
+
 
     # resize
     img_resized, target_ratio, size_heatmap = imgproc.resize_aspect_ratio(image, args.canvas_size, interpolation=cv2.INTER_LINEAR, mag_ratio=args.mag_ratio)
@@ -161,11 +163,13 @@ if __name__ == '__main__':
 
         bboxes, polys, score_text = test_net(net, image, args.text_threshold, args.link_threshold, args.low_text, args.cuda, args.poly, refine_net)
 
+        
         # save score text
         filename, file_ext = os.path.splitext(os.path.basename(image_path))
         mask_file = result_folder + "/res_" + filename + '_mask.jpg'
         cv2.imwrite(mask_file, score_text)
 
-        file_utils.saveResult(image_path, image[:,:,::-1], polys, dirname=result_folder)
+        print(polys)
+        file_utils.saveResult(image_path, image[:,:,::-1], polys, dirname=result_folder, verticals=None, texts=score_text)
 
     print("elapsed time : {}s".format(time.time() - t))
